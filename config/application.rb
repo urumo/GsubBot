@@ -26,6 +26,7 @@ module GsubBot
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
     config.hosts << 'nameless-scrubland-47827.herokuapp.com'
+    config.hosts << "aqueous-wildwood-22872.herokuapp.com"
     config.autoload_paths << Rails.root.join('app/lib')
     config.hosts << '7cddc31ef891.ngrok.io'
 
