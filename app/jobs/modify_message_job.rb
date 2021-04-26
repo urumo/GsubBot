@@ -9,7 +9,7 @@ class ModifyMessageJob < ApplicationJob
     to_find_reg = Regexp.new(to_find)
 
     final_text = initial_text.gsub(to_find_reg, replace)
-    final_text = "#{final_text[0..247]}..." if final_text.length > 250
+    final_text = "#{final_text[0..197]}..." if final_text.length > 200
 
     SendMessageJob.perform_later(send_to, final_text, reply_id)
   end

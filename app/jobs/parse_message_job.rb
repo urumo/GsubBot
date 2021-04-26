@@ -13,12 +13,12 @@ class ParseMessageJob < ApplicationJob
     end
 
     case_1 = begin
-      message.text.start_with?('m/')
+      message.text.start_with?('d/')
     rescue StandardError
       false
     end
     case_2 = begin
-      message.text.start_with?('-m/')
+      message.text.start_with?('-d/')
     rescue StandardError
       false
     end
