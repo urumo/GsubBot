@@ -27,6 +27,6 @@ class ParseMessageJob < ApplicationJob
     return if reply_id.nil?
 
     ModifyMessageJob.perform_later(message.message_id, send_to, message.reply_to_message.text, message.text,
-                                   reply_id)
+                                   reply_id, message.message_id)
   end
 end
