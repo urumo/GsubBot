@@ -28,7 +28,7 @@ module GsubBot
     config.hosts << 'nameless-scrubland-47827.herokuapp.com'
     config.hosts << 'aqueous-wildwood-22872.herokuapp.com'
     config.autoload_paths << Rails.root.join('app/lib')
-    config.hosts << '08602a1f235e.ngrok.io'
+    config.hosts << '78a795e994da.ngrok.io'
 
     # Configuration for the application, engines, and railties goes here.
     #
