@@ -15,7 +15,7 @@ class ModifyMessageJob < ApplicationJob
     final_text = "#{final_text[0..197]}..." if final_text.length > 200
     return SendMessageJob.perform_later(send_to, fail_replies.sample, caller) if final_text == initial_text
 
-    DeleteMessageJob.perform_later(send_to, initial_message_id) if flag[0] == '-'
+    DeleteMessageJob.perform_later(send_to, initial_message_id) if flag[0] == ('-') && (final_text != initial_text)
     SendMessageJob.perform_later(send_to, final_text, reply_id)
   end
 end
