@@ -4,6 +4,7 @@ class ParseMessageJob < ApplicationJob
   queue_as :default
 
   def perform(params)
+    identifier = ENV.fetch('IDENTIFIER', 'd')
     message = Tg::Message.new(JSON.parse(params, { symbolize_names: true }))
     send_to = message.chat.id
     reply_id = begin
@@ -13,12 +14,12 @@ class ParseMessageJob < ApplicationJob
     end
 
     case_1 = begin
-      message.text.start_with?('d/')
+      message.text.start_with?("#{identifier}/")
     rescue StandardError
       false
     end
     case_2 = begin
-      message.text.start_with?('-d/')
+      message.text.start_with?("-#{identifier}/")
     rescue StandardError
       false
     end
