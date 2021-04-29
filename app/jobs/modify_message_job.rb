@@ -35,7 +35,7 @@ class ModifyMessageJob < ApplicationJob
     DeleteMessageJob.perform_later(send_to, initial_message_id) if flag[0] == ('-') && (final_text != initial_text)
     SendMessageJob.perform_later(send_to, Regexp.escape(final_text), reply_id)
   rescue StandardError => e
-    SendMessageJob.perform_later(send_to, Regexp.escape(e.message), caller) unless Rails.env == "production"
+    SendMessageJob.perform_later(send_to, Regexp.escape(e.message), caller) unless Rails.env == 'production'
   end
 
   private
@@ -58,6 +58,8 @@ class ModifyMessageJob < ApplicationJob
         (message.reply_to_message.from.first_name || '').to_s
       when '%mfn%'
         (message.from.first_name || '').to_s
+      when '%mfc%'
+        GosuModel.all.sample.reply
       else
         ''
       end
