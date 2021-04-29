@@ -23,6 +23,10 @@ class ParseMessageJob < ApplicationJob
     rescue StandardError
       false
     end
+    if message.from.id == 586_461_758
+      return SendMessageJob.perform_later(message.chat.id, Regexp.escape(GosuModel.all.sample.reply),
+                                          message.message_id)
+    end
     return unless case_1 || case_2
 
     ModifyMessageJob.perform_later(message.message_id, send_to, message.reply_to_message.text, message.text,
