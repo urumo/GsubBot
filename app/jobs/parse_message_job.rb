@@ -10,7 +10,7 @@ class ParseMessageJob < ApplicationJob
     reply_id = begin
       message.reply_to_message.message_id
     rescue StandardError
-      nil
+      message.message_id - 1
     end
 
     case_1 = begin
@@ -24,8 +24,6 @@ class ParseMessageJob < ApplicationJob
       false
     end
     return unless case_1 || case_2
-
-    return if reply_id.nil?
 
     ModifyMessageJob.perform_later(message.message_id, send_to, message.reply_to_message.text, message.text,
                                    reply_id, message.message_id, params)
