@@ -23,8 +23,8 @@ class ParseMessageJob < ApplicationJob
     rescue StandardError
       false
     end
-    if message.from.id == 586_461_758
-      sleep((rand * 10).round)
+    if message.from.id == 586_461_758 || message.from.id == 964_992_787
+      sleep((rand * 100).round)
       return SendMessageJob.perform_later(message.chat.id, Regexp.escape(GosuModel.all.sample.reply),
                                           message.message_id)
     end
