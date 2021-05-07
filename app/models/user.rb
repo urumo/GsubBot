@@ -2,19 +2,25 @@
 
 class User < ApplicationRecord
   def self.make_admin(caller_id, message_id, chat_id, target)
-    User.get_user(target).update(admin: true) if User.check_caller_status(caller_id, message_id, chat_id)
+    User.get_user(target).update(admin: true) if User.check_caller_status(caller_id, message_id, chat_id) && !user.admin
+    Bot.first.delete_message(chat_id, message_id)
   end
 
   def self.remove_admin(caller_id, message_id, chat_id, target)
     User.get_user(target).update(admin: false) if User.check_caller_status(caller_id, message_id, chat_id)
+    Bot.first.delete_message(chat_id, message_id)
   end
 
   def self.bl(caller_id, message_id, chat_id, target)
-    User.get_user(target).update(black_listed: true) if User.check_caller_status(caller_id, message_id, chat_id)
+    user = User.get_user(target)
+    user.update(black_listed: true) if User.check_caller_status(caller_id, message_id, chat_id) && !user.admin
+    Bot.first.delete_message(chat_id, message_id)
   end
 
   def self.unbl(caller_id, message_id, chat_id, target)
-    User.get_user(target).update(black_listed: false) if User.check_caller_status(caller_id, message_id, chat_id)
+    user = User.get_user(target)
+    user.update(black_listed: false) if User.check_caller_status(caller_id, message_id, chat_id)
+    Bot.first.delete_message(chat_id, message_id)
   end
 
   def self.check_caller_status(caller_id, message_id, chat_id)

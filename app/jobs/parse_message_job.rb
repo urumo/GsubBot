@@ -7,22 +7,10 @@ class ParseMessageJob < ApplicationJob
     message = Tg::Message.new(JSON.parse(params, { symbolize_names: true }))
     return if message.text.nil? || message.text.empty?
 
-    if message.text.start_with?('/make_admin')
-      return execute(message.from.id, message.message_id, message.chat.id, message.reply_to_message.from,
-                     :make_admin)
-    end
-    if message.text.start_with?('/remove_admin')
-      return execute(message.from.id, message.message_id, message.chat.id, message.reply_to_message.from,
-                     :remove_admin)
-    end
-    if message.text.start_with?('/bl')
-      return execute(message.from.id, message.message_id, message.chat.id, message.reply_to_message.from,
-                     :bl)
-    end
-    if message.text.start_with?('/unbl')
-      return execute(message.from.id, message.message_id, message.chat.id, message.reply_to_message.from,
-                     :unbl)
-    end
+    return start_command_execution(message, :make_admin) if message.text.start_with?('/make_admin')
+    return start_command_execution(message, :remove_admin) if message.text.start_with?('/remove_admin')
+    return start_command_execution(message, :bl) if message.text.start_with?('/bl')
+    return start_command_execution(message, :unbl) if message.text.start_with?('/unbl')
 
     send_to = message.chat.id
     reply_id = begin
@@ -36,10 +24,10 @@ class ParseMessageJob < ApplicationJob
 
     black_listed = User.find_by(tg_id: message.from.id, black_listed: true)
 
-    unless black_listed.nil? # message.from.id == 586_461_758 # || message.from.id == 964_992_787
+    unless black_listed.nil?
       return Bot.all.each do |b|
-        sleep((rand * 10).round) && b.send_message(message.chat.id, GosuModel.all.sample.reply,
-                                                    message.message_id)
+        b.send_message(message.chat.id, GosuModel.all.sample.reply,
+                       message.message_id, (rand * 10).round * 6)
       end
     end
 
@@ -53,4 +41,12 @@ class ParseMessageJob < ApplicationJob
 
   def execute(caller_id, message_id, chat_id, target, operation) = User.send(operation, caller_id, message_id, chat_id,
                                                                              target)
+
+  def start_command_execution(message, command)
+    if message.reply_to_message.nil?
+      execute(message.from.id, message.message_id, message.chat.id, message.from, command)
+    else
+      execute(message.from.id, message.message_id, message.chat.id, message.reply_to_message.from, command)
+    end
+  end
 end
