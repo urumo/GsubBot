@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_507_103_112) do
+ActiveRecord::Schema.define(version: 20_210_507_202_807) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -32,8 +32,8 @@ ActiveRecord::Schema.define(version: 20_210_507_103_112) do
   end
 
   create_table 'users', force: :cascade do |t|
-    t.integer 'tg_id'
-    t.integer 'chat_id'
+    t.bigint 'tg_id'
+    t.bigint 'chat_id'
     t.string 'first_name'
     t.string 'last_name'
     t.string 'user_name'
@@ -41,6 +41,7 @@ ActiveRecord::Schema.define(version: 20_210_507_103_112) do
     t.datetime 'updated_at', precision: 6, null: false
     t.boolean 'admin', default: false
     t.boolean 'black_listed', default: false
+    t.boolean 'super_black_list', default: false
     t.index ['tg_id'], name: 'index_users_on_tg_id', unique: true
   end
 end

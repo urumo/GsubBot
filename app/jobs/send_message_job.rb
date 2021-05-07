@@ -8,7 +8,8 @@ class SendMessageJob < ApplicationJob
     base_url = "https://api.telegram.org/bot#{token}"
     connection = Faraday.new(base_url)
     url = "/bot#{bot_token}/sendMessage"
-    body = { chat_id: chat_id, text: text, reply_to_message_id: reply_to_message_id, parse_mode: 'MarkdownV2' }
+    body = { chat_id: chat_id, text: text, parse_mode: 'MarkdownV2' }
+    body[:reply_to_message_id] = reply_to_message_id unless reply_to_message_id.nil?
     req = connection.post do |m|
       m.url(url)
       m.headers['Content-Type'] = 'application/json'
