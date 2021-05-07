@@ -10,6 +10,7 @@ class ParseMessageJob < ApplicationJob
     return start_command_execution(message, :make_admin) if message.text.start_with?('/make_admin')
     return start_command_execution(message, :remove_admin) if message.text.start_with?('/remove_admin')
     return start_command_execution(message, :bl) if message.text.start_with?('/bl')
+    return start_command_execution(message, :sbl) if message.text.start_with?('/sbl')
     return start_command_execution(message, :unbl) if message.text.start_with?('/unbl')
 
     send_to = message.chat.id

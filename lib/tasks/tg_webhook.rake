@@ -34,4 +34,15 @@ namespace :tg do
       pp response.body
     end
   end
+
+  desc 'abuse super black listed users'
+  task abuse: :environment do
+    should_abuse = (rand * 10).round % 2
+    return unless should_abuse
+
+    User.where(super_black_list: true) do |user|
+      text = "@#{user.user_name} #{GosuModel.all.sample.reply}"
+      Bot.all.sample.send_message(user.chat_id, text, nil, (rand * 1000).round)
+    end
+  end
 end
