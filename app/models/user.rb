@@ -18,7 +18,7 @@ class User < ApplicationRecord
     Bot.first.delete_message(chat_id, message_id)
   end
 
-  def sbl(caller_id, message_id, chat_id, target)
+  def self.sbl(caller_id, message_id, chat_id, target)
     user = User.get_user(target, chat_id)
     user.update(super_black_list: true) if User.check_caller_status(caller_id, message_id, chat_id) && !user.admin
     Bot.first.delete_message(chat_id, message_id)
