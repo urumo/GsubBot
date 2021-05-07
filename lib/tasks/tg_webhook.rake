@@ -8,10 +8,9 @@ namespace :tg do
 
     url = "#{base_self_url}/telegram/get_updates"
     base_url = 'https://api.telegram.org'
-    Bot.all.each do |bot|
-      response = Faraday.get("#{base_url}/bot#{bot.token}/setWebhook?url=#{url}")
-      pp response.body
-    end
+    bot = Bot.first
+    response = Faraday.get("#{base_url}/bot#{bot.token}/setWebhook?url=#{url}")
+    pp response.body
   end
 
   desc 'delete webhook'
