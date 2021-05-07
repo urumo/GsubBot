@@ -25,16 +25,9 @@ module GsubBot
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
-    config.hosts << 'nameless-scrubland-47827.herokuapp.com'
-    config.hosts << 'aqueous-wildwood-22872.herokuapp.com'
-    config.hosts << 'damp-escarpment-87139.herokuapp.com'
-    config.hosts << 'pacific-tundra-75455.herokuapp.com'
     config.autoload_paths << Rails.root.join('app/lib')
-    config.hosts << 'quiet-crag-91842.herokuapp.com'
-    config.hosts << 'thawing-earth-50721.herokuapp.com'
-    config.hosts << 'quiet-shore-58738.herokuapp.com'
-    config.hosts << 'polar-citadel-85878.herokuapp.com'
-
+    config.autoload_paths << Rails.root.join('app/errors')
+    config.hosts << 'nameless-scrubland-47827.herokuapp.com'
     # Configuration for the application, engines, and railties goes here.
     #
     # These settings can be overridden in specific environments using the files

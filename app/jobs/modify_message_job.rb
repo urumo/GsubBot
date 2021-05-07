@@ -10,7 +10,8 @@ class ModifyMessageJob < ApplicationJob
     'тебе с такими регулярками не стыдно людям в глаза смотреть?'
   ]
 
-  def perform(initial_message_id, send_to, initial_text, exp, reply_id, caller, params)
+  def perform(initial_message_id, send_to, initial_text, exp, reply_id, caller, params, bot_id)
+    bot = Bot.find(bot_id)
     message = Tg::Message.new(JSON.parse(params, { symbolize_names: true }))
 
     flag, to_find, replace = exp.split('/')
@@ -28,14 +29,12 @@ class ModifyMessageJob < ApplicationJob
     end
 
     final_text = parse_macros(text, message)
-    if final_text == initial_text
-      return SendMessageJob.perform_later(send_to, Regexp.escape(fail_replies.sample), caller)
-    end
+    return bot.send_message(send_to, fail_replies.sample, caller) if final_text == initial_text
 
-    DeleteMessageJob.perform_later(send_to, initial_message_id) if flag[0] == ('-') && (final_text != initial_text)
-    SendMessageJob.perform_later(send_to, Regexp.escape(final_text), reply_id)
+    bot.delete_message(send_to, initial_message_id) if flag[0] == ('-') && (final_text != initial_text)
+    bot.send_message(send_to, final_text, reply_id)
   rescue StandardError => e
-    SendMessageJob.perform_later(send_to, Regexp.escape(e.message), caller) # unless Rails.env == 'production'
+    bot.send_message(send_to, e.message, caller) unless Rails.env == 'production'
   end
 
   private
