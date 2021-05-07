@@ -12,7 +12,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_507_202_807) do
+ActiveRecord::Schema.define(version: 20_210_507_205_036) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
 
@@ -42,6 +42,6 @@ ActiveRecord::Schema.define(version: 20_210_507_202_807) do
     t.boolean 'admin', default: false
     t.boolean 'black_listed', default: false
     t.boolean 'super_black_list', default: false
-    t.index ['tg_id'], name: 'index_users_on_tg_id', unique: true
+    t.index %w[tg_id chat_id], name: 'index_users_on_tg_id_and_chat_id', unique: true
   end
 end
