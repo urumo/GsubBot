@@ -3,8 +3,7 @@
 class SendMessageJob < ApplicationJob
   queue_as :default
 
-  def perform(chat_id, text, reply_to_message_id)
-    bot_token = ENV.fetch('BOT_TOKEN') { Rails.application.credentials.tg[:token] }
+  def perform(chat_id, text, reply_to_message_id, bot_token)
     token = "bot#{bot_token}"
     base_url = "https://api.telegram.org/bot#{token}"
     connection = Faraday.new(base_url)

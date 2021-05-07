@@ -1,27 +1,38 @@
 # frozen_string_literal: true
 
 namespace :tg do
-  base_url = 'https://api.telegram.org'
-  bot_token = ENV.fetch('BOT_TOKEN') { Rails.application.credentials.tg[:token] }
-  token = "bot#{bot_token}"
-  base_self_url = ENV.fetch('TG_WEBHOOK_URL') { Rails.application.credentials.tg[:webhook_url] }
-  url = "#{base_self_url}/telegram/get_updates"
-
   desc 'set webhook'
   task set: :environment do
-    response = Faraday.get("#{base_url}/#{token}/setWebhook?url=#{url}")
-    pp response.body
+    base_self_url = ENV['TG_WEBHOOK_URL']
+    raise TelegramWebhookUrlError, 'TG_WEBHOOK_URL unspecified' if base_self_url.nil?
+
+    url = "#{base_self_url}/telegram/get_updates"
+    base_url = 'https://api.telegram.org'
+    Bot.all.each do |bot|
+      response = Faraday.get("#{base_url}/bot#{bot.token}/setWebhook?url=#{url}")
+      pp response.body
+    end
   end
 
   desc 'delete webhook'
   task unset: :environment do
-    response = Faraday.get("#{base_url}/#{token}/deleteWebhook?url=#{url}")
-    pp response.body
+    base_self_url = ENV['TG_WEBHOOK_URL']
+    raise TelegramWebhookUrlError, 'TG_WEBHOOK_URL unspecified' if base_self_url.nil?
+
+    url = "#{base_self_url}/telegram/get_updates"
+    base_url = 'https://api.telegram.org'
+    Bot.all.each do |bot|
+      response = Faraday.get("#{base_url}/bot#{bot.token}/deleteWebhook?url=#{url}")
+      pp response.body
+    end
   end
 
   desc 'webhook status'
   task status: :environment do
-    response = Faraday.get("#{base_url}/#{token}/getWebhookInfo")
-    pp response.body
+    base_url = 'https://api.telegram.org'
+    Bot.all.each do |bot|
+      response = Faraday.get("#{base_url}/bot#{bot.token}/getWebhookInfo")
+      pp response.body
+    end
   end
 end

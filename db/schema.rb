@@ -12,9 +12,18 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20_210_429_154_647) do
+ActiveRecord::Schema.define(version: 20_210_507_103_112) do
   # These are extensions that must be enabled in order to support this database
   enable_extension 'plpgsql'
+
+  create_table 'bots', force: :cascade do |t|
+    t.string 'alias'
+    t.string 'token'
+    t.datetime 'created_at', precision: 6, null: false
+    t.datetime 'updated_at', precision: 6, null: false
+    t.index ['alias'], name: 'index_bots_on_alias', unique: true
+    t.index ['token'], name: 'index_bots_on_token', unique: true
+  end
 
   create_table 'gosu_models', force: :cascade do |t|
     t.text 'reply'
@@ -30,5 +39,8 @@ ActiveRecord::Schema.define(version: 20_210_429_154_647) do
     t.string 'user_name'
     t.datetime 'created_at', precision: 6, null: false
     t.datetime 'updated_at', precision: 6, null: false
+    t.boolean 'admin', default: false
+    t.boolean 'black_listed', default: false
+    t.index ['tg_id'], name: 'index_users_on_tg_id', unique: true
   end
 end

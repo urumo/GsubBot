@@ -1,0 +1,8 @@
+Description:
+    Explain the generator
+
+Example:
+    rails generate error Thing
+
+    This will create:
+        what/will/it/create
