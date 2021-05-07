@@ -41,6 +41,8 @@ namespace :tg do
     return unless should_abuse
 
     User.where(super_black_list: true) do |user|
+      next if user.user_name.nil? || user.user_name.empty?
+
       text = "@#{user.user_name} #{GosuModel.all.sample.reply}"
       Bot.all.sample.send_message(user.chat_id, text, nil, (rand * 1000).round)
     end

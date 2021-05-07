@@ -42,7 +42,5 @@ class User < ApplicationRecord
 
   def self.get_user(target, chat_id)
     User.find_or_create_by(tg_id: target.id, user_name: target.username, chat_id: chat_id)
-  rescue ActiveRecord::RecordNotUnique
-    User.find_by(tg_id: target.id, user_name: target.username, chat_id: chat_id)
   end
 end
