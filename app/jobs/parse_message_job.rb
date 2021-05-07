@@ -38,7 +38,7 @@ class ParseMessageJob < ApplicationJob
 
     unless black_listed.nil? # message.from.id == 586_461_758 # || message.from.id == 964_992_787
       return Bot.all.each do |b|
-        sleep((rand * 100).round) && b.send_message(message.chat.id, GosuModel.all.sample.reply,
+        sleep((rand * 10).round) && b.send_message(message.chat.id, GosuModel.all.sample.reply,
                                                     message.message_id)
       end
     end
