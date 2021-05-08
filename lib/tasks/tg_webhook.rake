@@ -38,16 +38,16 @@ namespace :tg do
   desc 'abuse super black listed users'
   task abuse: :environment do
     should_abuse = (rand * 10).round.even?
-    return unless should_abuse
+    if should_abuse
+      User.where(super_black_list: true).each do |user|
+        next if user.user_name.nil? || user.user_name.empty?
 
-    User.where(super_black_list: true) do |user|
-      next if user.user_name.nil? || user.user_name.empty?
-
-      text = "@#{user.user_name} #{GosuModel.all.sample.reply}"
-      Bot.all.each do |b|
-        delay = (rand * 3600).round
-        b.send_message(user.chat_id, text, nil, delay)
-        puts "#{b} is sending message in #{delay} seconds"
+        text = "@#{user.user_name} #{GosuModel.all.sample.reply}"
+        Bot.all.each do |b|
+          delay = (rand * 3600).round
+          b.send_message(user.chat_id, text, nil, delay)
+          puts "bot #{b.alias} is sending message in #{delay} seconds"
+        end
       end
     end
   end
