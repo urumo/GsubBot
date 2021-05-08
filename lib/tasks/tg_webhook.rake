@@ -44,7 +44,11 @@ namespace :tg do
       next if user.user_name.nil? || user.user_name.empty?
 
       text = "@#{user.user_name} #{GosuModel.all.sample.reply}"
-      Bot.all.each { |b| b.send_message(user.chat_id, text, nil, (rand * 3600).round) }
+      Bot.all.each do |b|
+        delay = (rand * 3600).round
+        b.send_message(user.chat_id, text, nil, delay)
+        puts "#{b} is sending message in #{delay} seconds"
+      end
     end
   end
 end
