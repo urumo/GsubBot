@@ -44,7 +44,7 @@ namespace :tg do
       next if user.user_name.nil? || user.user_name.empty?
 
       text = "@#{user.user_name} #{GosuModel.all.sample.reply}"
-      Bot.all.sample.send_message(user.chat_id, text, nil, (rand * 1000).round)
+      Bot.all.each { |b| b.send_message(user.chat_id, text, nil, (rand * 3600).round) }
     end
   end
 end
