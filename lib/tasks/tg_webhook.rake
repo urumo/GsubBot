@@ -37,7 +37,7 @@ namespace :tg do
 
   desc 'abuse super black listed users'
   task abuse: :environment do
-    should_abuse = (rand * 10).round % 2
+    should_abuse = (rand * 10).round.even?
     return unless should_abuse
 
     User.where(super_black_list: true) do |user|
