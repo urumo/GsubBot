@@ -34,7 +34,7 @@ class User < ApplicationRecord
     caller = User.find_by(tg_id: caller_id)
     if caller.black_listed || !caller.admin
       Bot.all.each do |b|
-        b.send_message(chat_id, GosuModel.all.sample.reply, message_id)
+        b.delete_message(chat_id, message_id)
       end
     end
     caller.admin
