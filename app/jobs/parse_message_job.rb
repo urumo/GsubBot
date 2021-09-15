@@ -28,7 +28,7 @@ class ParseMessageJob < ApplicationJob
       message.message_id - 1
     end
     bot = Bot.all.find do |b|
-      message.text.start_with("#{b.alias}/") || message.text.start_with("-#{b.alias}/")
+      message.text.start_with?("#{b.alias}/") || message.text.start_with?("-#{b.alias}/")
     end
 
     black_listed = User.find_by(tg_id: message.from.id, black_listed: true)
